@@ -6,11 +6,12 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/ParkerWen/wechat_pro/app/midjourney/model"
+	"github.com/ParkerWen/wechat_pro/app/midjourney/task/model"
 	"github.com/ParkerWen/wechat_pro/app/mqueue/job/internal/svc"
 	"github.com/hibiken/asynq"
 	"github.com/parnurzeal/gorequest"
 	"github.com/pkg/errors"
+	"github.com/zeromicro/go-zero/core/logx"
 )
 
 type UpdateMJRecordHandler struct {
@@ -47,11 +48,16 @@ func (h *UpdateMJRecordHandler) ProcessTask(ctx context.Context, _ *asynq.Task) 
 	if len(list) > 0 {
 		for _, taskInfo := range list {
 			request := gorequest.New()
-			resp, _, _ := request.Get(fmt.Sprintf("http://38.95.233.164:8088/mj/task/%s/fetch", taskInfo.TaskId)).End()
+			resp, body, _ := request.Get(fmt.Sprintf("http://38.95.233.164:8088/mj/task/%s/fetch", taskInfo.TaskId)).End()
+			defer resp.Body.Close()
+			if len(body) <= 0 {
+				continue
+			}
 			var taskFetchRes TaskFetchRes
 			err := json.NewDecoder(resp.Body).Decode(&taskFetchRes)
 			if err != nil {
-				return err
+				logx.Error(err)
+				continue
 			}
 			if taskFetchRes.Status == "SUCCESS" {
 				// UpdateByMJ

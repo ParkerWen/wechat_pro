@@ -1,7 +1,7 @@
 package svc
 
 import (
-	"github.com/ParkerWen/wechat_pro/app/midjourney/model"
+	"github.com/ParkerWen/wechat_pro/app/midjourney/task/model"
 	"github.com/ParkerWen/wechat_pro/app/mqueue/job/internal/config"
 	"github.com/hibiken/asynq"
 	"github.com/zeromicro/go-zero/core/stores/sqlx"

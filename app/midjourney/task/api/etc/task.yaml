@@ -1,0 +1,13 @@
+Name: task
+Host: 0.0.0.0
+Port: 8888
+
+Log:
+  ServiceName: task-api
+  Level: error
+
+DB:
+  DataSource: root:A6UBxB4igUNxPRfx3CpYutH353VYo8Atpc@tcp(localhost:3306)/midjourney?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+Cache:
+  - Host: localhost:6379
+    Pass: A6UBxB4igUNxPRfx3CpYutH353VYo8Atpc
