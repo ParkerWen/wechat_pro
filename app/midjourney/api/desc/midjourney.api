@@ -1,0 +1,40 @@
+syntax = "v1"
+
+info(
+	title: "Midjourney"
+	desc: "Midjourney"
+	author: "wenshiye"
+	version: "v1"
+)
+
+import (
+	"type/midjourney.api"
+)
+
+@server(
+	prefix: mj/v1
+)
+
+service midjourney {
+	
+	@doc "查询任务"
+	@handler fetchTask
+	post /fetchTask (fetchTaskReq) returns (fetchTaskResp)
+	
+	@doc "任务列表"
+	@handler listTask
+	get /listTask (listTaskReq) returns (listTaskResp)
+	
+	@doc "绘画任务"
+	@handler imagine
+	post /imagine (imagineReq) returns (imagineResp)
+	
+	@doc "放大图画"
+	@handler upscale
+	post /upscale (upscaleReq) returns (upscaleResp)
+	
+	@doc "变换图画"
+	@handler variation
+	post /variation (variationReq) returns (variationResp)
+	
+}

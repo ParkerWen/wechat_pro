@@ -1,0 +1,19 @@
+Name: mqueue-job
+Host: 0.0.0.0
+Port: 3002
+Mode: dev
+
+Log:
+  ServiceName: mqueue-job
+  Level: error
+
+Redis:
+  Host: 175.178.233.65:6379
+  Type: node
+  Pass: A6UBxB4igUNxPRfx3CpYutH353VYo8Atpc
+
+DB:
+  DataSource: root:A6UBxB4igUNxPRfx3CpYutH353VYo8Atpc@tcp(localhost:3306)/midjourney?charset=utf8mb4&parseTime=true&loc=Asia%2FShanghai
+Cache:
+  - Host: localhost:6379
+    Pass: A6UBxB4igUNxPRfx3CpYutH353VYo8Atpc

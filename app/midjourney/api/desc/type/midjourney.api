@@ -1,0 +1,72 @@
+syntax = "v1"
+
+info(
+	title: "Midjourney"
+	desc: "Midjourney"
+	author: "wenshiye"
+	version: "v1"
+)
+
+type Task {
+	Id          int64  `json:"id"`
+	TaskId      string `json:"task_id"`
+	Action      string `json:"action"`
+	Index       int64  `json:"index"`
+	Prompt      string `json:"prompt"`
+	Description string `json:"description"`
+	ImageUrl    string `json:"image_url"`
+	Status      string `json:"status"`
+	CreatedAt   int64  `json:"created_at"`
+	UpdatedAt   int64  `json:"updated_at"`
+}
+
+
+type (
+	fetchTaskReq {
+		ID     int64  `json:"id"`
+		TaskId string `json:"task_id"` //任务ID
+	}
+	fetchTaskResp {
+		TaskInfo Task `json:"task_info"`
+	}
+)
+
+type (
+	listTaskReq {
+	}
+	listTaskResp {
+		List []Task `json:"list"`
+	}
+)
+
+type (
+	imagineReq {
+		Prompt      string `json:"prompt"`
+	}
+	imagineResp {
+		Code int64  `json:"code"`
+		Msg  string `json:"msg"`
+	}
+)
+
+type (
+	upscaleReq {
+		TaskId      string `json:"task_id"`
+		Index       int64  `json:"index"`
+	}
+	upscaleResp {
+		Code int64  `json:"code"`
+		Msg  string `json:"msg"`
+	}
+)
+
+type (
+	variationReq {
+		TaskId      string `json:"task_id"`
+		Index       int64  `json:"index"`
+	}
+	variationResp {
+		Code int64  `json:"code"`
+		Msg  string `json:"msg"`
+	}
+)

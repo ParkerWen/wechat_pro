@@ -1,0 +1,41 @@
+version: '3'
+
+services:
+  # redis服务
+  redis:
+    image: 'redis:latest'
+    restart: always
+    user: root
+    ports:
+      - '6379:6379'
+    command: redis-server --save 20 1 --loglevel warning --requirepass A6UBxB4igUNxPRfx3CpYutH353VYo8Atpc
+    volumes:
+      - ./docker/redis/data:/data
+    healthcheck:
+      test: ["CMD", "redis-cli", "ping"]
+      interval: 5s
+      timeout: 10s
+      retries: 3
+
+  mysql:
+    image: 'mysql:8.0'
+    restart: always
+    user: root
+    environment:
+      MYSQL_USER: "wechat"
+      MYSQL_PASSWORD: "A6UBxB4igUNxPRfx3CpYutH353VYo8Atpc"
+      MYSQL_DATABASE: "wechat"
+      MYSQL_ROOT_PASSWORD: "A6UBxB4igUNxPRfx3CpYutH353VYo8Atpc"
+    ports:
+      - '3306:3306'
+    volumes:
+      - ./docker/mysql/data:/var/lib/mysql
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost"]
+      interval: 30s
+      timeout: 10s
+      retries: 5
+
+networks:
+  nginx_network:
+    driver: bridge
