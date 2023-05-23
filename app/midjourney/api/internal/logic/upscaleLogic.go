@@ -35,10 +35,16 @@ func (l *UpscaleLogic) Upscale(req *types.UpscaleReq) (*types.UpscaleResp, error
 	whereBuilder := l.svcCtx.TaskModel.RowBuilder()
 	list, err := l.svcCtx.TaskModel.FindByParentTaskIdAndAction(l.ctx, req.TaskId, action, whereBuilder)
 	if err != nil && err != model.ErrNotFound {
-		return nil, errors.Wrapf(errors.New("数据库繁忙,请稍后再试"), "Failed to get pending task err : %v ", err)
+		return &types.UpscaleResp{
+			Code: http.StatusBadRequest,
+			Msg:  errors.Wrapf(errors.New("数据库繁忙,请稍后再试"), "Failed to get pending task err : %v ", err).Error(),
+		}, nil
 	}
 	if len(list) > 0 {
-		return nil, errors.New("该任务已经执行过 UPSCALE 操作，不可重复执行")
+		return &types.UpscaleResp{
+			Code: http.StatusBadRequest,
+			Msg:  "该任务已经执行过 UPSCALE 操作，不可重复执行",
+		}, nil
 	}
 	m := map[string]interface{}{
 		"action": action,
@@ -54,8 +60,12 @@ func (l *UpscaleLogic) Upscale(req *types.UpscaleReq) (*types.UpscaleResp, error
 	var res ImagineRes
 	err = json.NewDecoder(resp.Body).Decode(&res)
 	if err != nil {
-		return nil, err
+		return &types.UpscaleResp{
+			Code: http.StatusBadRequest,
+			Msg:  err.Error(),
+		}, nil
 	}
+
 	task := new(model.Task)
 	task.Action = action
 	task.Index = req.Index
@@ -69,7 +79,10 @@ func (l *UpscaleLogic) Upscale(req *types.UpscaleReq) (*types.UpscaleResp, error
 
 	_, err = l.svcCtx.TaskModel.InsertByImagine(l.ctx, task)
 	if err != nil {
-		return nil, errors.Wrapf(err, "Task Database Exception task : %+v , err: %v", task, err)
+		return &types.UpscaleResp{
+			Code: http.StatusBadRequest,
+			Msg:  errors.Wrapf(err, "Task Database Exception task : %+v , err: %v", task, err).Error(),
+		}, nil
 	}
 	return &types.UpscaleResp{
 		Code: http.StatusOK,

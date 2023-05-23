@@ -53,14 +53,16 @@ func (h *UpdateMJRecordHandler) ProcessTask(ctx context.Context, _ *asynq.Task) 
 			if err != nil {
 				return err
 			}
-			// UpdateByMJ
-			taskInfo.ImageUrl = taskFetchRes.ImageUrl
-			taskInfo.Description = taskFetchRes.Description
-			taskInfo.Status = taskFetchRes.Status
-			taskInfo.UpdatedAt = time.Now().Unix()
-			err = h.svcCtx.TaskModel.UpdateByMJ(ctx, taskInfo)
-			if err != nil {
-				return err
+			if taskFetchRes.Status == "SUCCESS" {
+				// UpdateByMJ
+				taskInfo.ImageUrl = taskFetchRes.ImageUrl
+				taskInfo.Description = taskFetchRes.Description
+				taskInfo.Status = taskFetchRes.Status
+				taskInfo.UpdatedAt = time.Now().Unix()
+				err = h.svcCtx.TaskModel.UpdateByMJ(ctx, taskInfo)
+				if err != nil {
+					return err
+				}
 			}
 		}
 	}

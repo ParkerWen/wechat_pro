@@ -4,13 +4,13 @@ import (
 	"bytes"
 	"context"
 	"encoding/json"
+	"fmt"
 	"net/http"
 	"time"
 
 	"github.com/ParkerWen/wechat_pro/app/midjourney/api/internal/svc"
 	"github.com/ParkerWen/wechat_pro/app/midjourney/api/internal/types"
 	"github.com/ParkerWen/wechat_pro/app/midjourney/model"
-	"github.com/pkg/errors"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -36,7 +36,9 @@ func NewImagineLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ImagineLo
 }
 
 func (l *ImagineLogic) Imagine(req *types.ImagineReq) (*types.ImagineResp, error) {
+	var action = "IMAGINE"
 	m := map[string]interface{}{
+		"action": action,
 		"prompt": req.Prompt,
 	}
 	mJson, _ := json.Marshal(m)
@@ -48,10 +50,13 @@ func (l *ImagineLogic) Imagine(req *types.ImagineReq) (*types.ImagineResp, error
 	var res ImagineRes
 	err := json.NewDecoder(resp.Body).Decode(&res)
 	if err != nil {
-		return nil, err
+		return &types.ImagineResp{
+			Code: http.StatusBadRequest,
+			Msg:  err.Error(),
+		}, nil
 	}
 	task := new(model.Task)
-	task.Action = "IMAGINE"
+	task.Action = action
 	task.Prompt = req.Prompt
 	task.Index = 0
 	task.Description = res.Description
@@ -63,7 +68,10 @@ func (l *ImagineLogic) Imagine(req *types.ImagineReq) (*types.ImagineResp, error
 
 	_, err = l.svcCtx.TaskModel.InsertByImagine(l.ctx, task)
 	if err != nil {
-		return nil, errors.Wrapf(err, "Task Database Exception task : %+v , err: %v", task, err)
+		return &types.ImagineResp{
+			Code: http.StatusBadRequest,
+			Msg:  fmt.Sprintf("Task Database Exception task : %+v , err: %v", task, err),
+		}, nil
 	}
 	return &types.ImagineResp{
 		Code: http.StatusOK,

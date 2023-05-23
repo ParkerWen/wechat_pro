@@ -34,10 +34,16 @@ func (l *VariationLogic) Variation(req *types.VariationReq) (*types.VariationRes
 	// 判断 task_id 所属的任务是否 UPSCALE，如果是则拒绝 VARIATION 操作
 	ptask, err := l.svcCtx.TaskModel.FindOneByTaskId(l.ctx, req.TaskId)
 	if err != nil {
-		return nil, err
+		return &types.VariationResp{
+			Code: http.StatusBadRequest,
+			Msg:  err.Error(),
+		}, nil
 	}
 	if ptask.Action == "UPSCALE" {
-		return nil, errors.New("放大后的图画不能做变换操作")
+		return &types.VariationResp{
+			Code: http.StatusBadRequest,
+			Msg:  "放大后的图画不能做变换操作",
+		}, nil
 	}
 
 	m := map[string]interface{}{
@@ -54,7 +60,10 @@ func (l *VariationLogic) Variation(req *types.VariationReq) (*types.VariationRes
 	var res ImagineRes
 	err = json.NewDecoder(resp.Body).Decode(&res)
 	if err != nil {
-		return nil, err
+		return &types.VariationResp{
+			Code: http.StatusBadRequest,
+			Msg:  err.Error(),
+		}, nil
 	}
 	task := new(model.Task)
 	task.Action = action
@@ -69,7 +78,10 @@ func (l *VariationLogic) Variation(req *types.VariationReq) (*types.VariationRes
 
 	_, err = l.svcCtx.TaskModel.InsertByImagine(l.ctx, task)
 	if err != nil {
-		return nil, errors.Wrapf(err, "Task Database Exception task : %+v , err: %v", task, err)
+		return &types.VariationResp{
+			Code: http.StatusBadRequest,
+			Msg:  errors.Wrapf(err, "Task Database Exception task : %+v , err: %v", task, err).Error(),
+		}, nil
 	}
 	return &types.VariationResp{
 		Code: http.StatusOK,
