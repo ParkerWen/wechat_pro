@@ -1,0 +1,53 @@
+syntax = "v1"
+
+info(
+	title: "Midjourney User"
+	desc: "Midjourney User"
+	author: "wenshiye"
+	version: "v1"
+)
+
+import (
+	"type/user.api"
+)
+
+@server(
+	prefix: mj/user/v1
+)
+
+service user {
+	
+	@doc "用户邮箱注册"
+	@handler registerByEmail
+	post /email/register (registerByEmailReq) returns (registerByEmailResp)
+	
+	@doc "用户邮箱登录"
+	@handler loginByEmail
+	post /email/login (loginByEmailReq) returns (loginByEmailResp)
+	
+	@doc "用户手机号注册"
+	@handler registerByPhone
+	post /phone/register (registerByPhoneReq) returns (registerByPhoneResp)
+	
+	@doc "用户手机号登录"
+	@handler loginByPhone
+	post /phone/login (loginByPhoneReq) returns (loginByPhoneResp)
+	
+	@doc "生成AccessToken"
+	@handler generateToken
+	post /token (generateTokenReq) returns (generateTokenResp)
+	
+}
+
+@server(
+	jwt: Auth
+	prefix: mj/user/v1
+)
+
+service user {
+	
+	@doc "用户信息"
+	@handler fetch
+	get /fetch (fetchReq) returns (fetchResp)
+	
+}

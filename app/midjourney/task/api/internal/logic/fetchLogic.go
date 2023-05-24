@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"net/url"
 
 	"github.com/ParkerWen/wechat_pro/app/midjourney/task/api/internal/svc"
 	"github.com/ParkerWen/wechat_pro/app/midjourney/task/api/internal/types"
@@ -38,6 +39,13 @@ func (l *FetchLogic) Fetch(req *types.FetchReq) (*types.FetchResp, error) {
 		if err != nil {
 			return nil, err
 		}
+		url, err := url.Parse(task.ImageUrl)
+		if err != nil {
+			return nil, err
+		}
+		url.Scheme = "http"
+		url.Host = "img.itcity.cc"
+		task.ImageUrl = url.String()
 		_ = copier.Copy(&tpTask, task)
 	}
 

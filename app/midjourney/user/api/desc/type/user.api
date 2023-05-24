@@ -1,0 +1,80 @@
+syntax = "v1"
+
+info(
+	title: "Midjourney User"
+	desc: "Midjourney User"
+	author: "wenshiye"
+	version: "v1"
+)
+
+type (
+	registerByEmailReq {
+		Email           string `json:"email" validate:"required,email"`
+		Password        string `json:"password" validate:"required,eqcsfield=ConfirmPassword"`
+		ConfirmPassword string `json:"confirm_password" validate:"required,eqcsfield=Password"`
+	}
+
+	registerByEmailResp {
+		Code int64  `json:"code"`
+		Msg  string `json:"msg"`
+	}
+)
+
+type (
+	loginByEmailReq {
+		Email    string `json:"email"`
+		Password string `json:"password"`
+	}
+	loginByEmailResp {
+		Code int64                  `json:"code"`
+		Msg  string                 `json:"msg"`
+		Data map[string]interface{} `json:"data"`
+	}
+)
+
+type (
+	registerByPhoneReq {
+		Phone           int64  `json:"phone"`
+		Password        string `json:"password"`
+		ConfirmPassword string `json:"confirm_password"`
+	}
+
+	registerByPhoneResp {
+		Code int64  `json:"code"`
+		Msg  string `json:"msg"`
+	}
+)
+
+type (
+	loginByPhoneReq {
+		Phone    int64  `json:"phone"`
+		Password string `json:"password"`
+	}
+
+	loginByPhoneResp {
+		Code int64                  `json:"code"`
+		Msg  string                 `json:"msg"`
+		Data map[string]interface{} `json:"data"`
+	}
+)
+
+type (
+	generateTokenReq {
+		UserId int64 `json:"user_id"`
+	}
+
+	generateTokenResp {
+		AccessToken  string `json:"asscess_token"`
+		AccessExpire int64  `json:"access_expire"`
+		RefreshAfter int64  `json:"refresh_after"`
+	}
+)
+
+type (
+	fetchReq  struct{}
+	fetchResp {
+		Code int64                  `json:"code"`
+		Msg  string                 `json:"msg"`
+		Data map[string]interface{} `json:"data"`
+	}
+)
