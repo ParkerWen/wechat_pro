@@ -1,0 +1,235 @@
+syntax = "v1"
+
+info(
+	title: "企业微信"
+	desc: "Midjourney"
+	author: "wenshiye"
+	version: "v1"
+)
+
+type (
+	notifyReq {
+		Action      string `json:"action"`
+		ID          string `json:"id"`
+		Prompt      string `json:"prompt"`
+		PromptEn    string `json:"promptEn"`
+		Description string `json:"description"`
+		State       string `json:"state"`
+		SubmitTime  int64  `json:"submitTime"`
+		StartTime   int64  `json:"startTime"`
+		FinishTime  int64  `json:"finishTime"`
+		ImageUrl    string `json:"imageUrl"`
+		Status      string `json:"status"`
+		FailReason  string `json:"failReason"`
+	}
+
+	notifyResp {
+		ErrCode int    `json:"err_code"`
+		ErrMsg  string `json:"err_msg"`
+	}
+)
+
+type (
+	imagineReq {
+		Prompt     string `json:"prompt"`
+		State      string `json:"state"`
+		NotifyHook string `json:"notifyHook"`
+	}
+
+	imagineResp {
+		Code int64  `json:"code"`
+		Msg  string `json:"msg"`
+	}
+)
+
+type (
+	upscaleReq {
+		TaskId string `json:"task_id"`
+		Index  int64  `json:"index"`
+	}
+
+	upscaleResp {
+		Code int64  `json:"code"`
+		Msg  string `json:"msg"`
+	}
+)
+
+type (
+	variationReq {
+		TaskId string `json:"task_id"`
+		Index  int64  `json:"index"`
+	}
+
+	variationResp {
+		Code int64  `json:"code"`
+		Msg  string `json:"msg"`
+	}
+)
+
+type (
+	callbackReq {
+		MsgSignature string `form:"msg_signature"`
+		TimeStamp    string `form:"timestamp"`
+		Nonce        string `form:"nonce"`
+		EchoStr      string `form:"echostr,optional"`
+	}
+
+	callbackResp {
+		ErrCode int    `json:"err_code"`
+		ErrMsg  string `json:"err_msg"`
+		Data    []byte `json:"data"`
+	}
+)
+
+type (
+	uploadTempFileReq {
+		AccessToken string `json:"access_token"`
+		Media       string `json:"media"`
+	}
+
+	uploadTempFileResp {
+		ErrCode   int64  `json:"errcode"`
+		ErrMsg    string `json:"errmsg"`
+		Type      string `json:"type"`
+		MediaId   string `json:"media_id"`
+		CreatedAt string `json:"created_at"`
+	}
+)
+
+type (
+	Source {
+		IconUrl   string `json:"icon_url"`
+		Desc      string `json:"desc"`
+		DescColor int64  `json:"desc_color"`
+	}
+	Action {
+		Text string `json:"text"`
+		Key  string `json:"key"`
+	}
+	ActionMenu {
+		Desc       string   `json:"desc"`
+		ActionList []Action `json:"action_list"`
+	}
+	MainTitle {
+		Title string `json:"title"`
+		Desc  string `json:"desc"`
+	}
+	QuoteArea {
+		Type      int64  `json:"type"`
+		Url       string `json:"url"`
+		Title     string `json:"title"`
+		QuoteText string `json:"quote_text"`
+	}
+	EmphasisContent {
+		Title string `json:"title"`
+		Desc  string `json:"desc"`
+	}
+	HorizontalContent {
+		Type    int64  `json:"type"`
+		Keyname string `json:"keyname"`
+		Value   string `json:"value"`
+		Url     string `json:"url"`
+		MediaId string `json:"media_id"`
+		UserId  string `json:"userid"`
+	}
+	Jump {
+		Type     int64  `json:"type"`
+		Title    string `json:"title"`
+		Url      string `json:"url"`
+		Appid    string `json:"appid"`
+		Pagepath string `json:"pagepath"`
+	}
+	CardAction {
+		Type     int64  `json:"type"`
+		Url      string `json:"url"`
+		Appid    string `json:"appid"`
+		Pagepath string `json:"pagepath"`
+	}
+	TextNoticetemplateCard {
+		CardType              string              `json:"card_type"`
+		Source                Source              `json:"source"`
+		ActionMenu            ActionMenu          `json:"action_menu"`
+		TaskId                string              `json:"task_id"`
+		MainTitle             MainTitle           `json:"main_title"`
+		QuoteArea             QuoteArea           `json:"quote_area"`
+		EmphasisContent       EmphasisContent     `json:"emphasis_content"`
+		SubTitleText          string              `json:"sub_title_text"`
+		HorizontalContentList []HorizontalContent `json:"horizontal_content_list"`
+		JumpList              []Jump              `json:"jump_list"`
+		CardAction            CardAction          `json:"card_action"`
+	}
+
+	Option {
+		Id   string `json:"id"`
+		Text string `json:"text"`
+	}
+
+	ButtonSelection {
+		QuestionKey string   `json:"question_key"`
+		Title       string   `json:"title"`
+		OptionList  []Option `json:"option_list"`
+		SelectedId  string   `json:"selected_id"`
+	}
+
+	Button {
+		Type  int64  `json:"type"`
+		Text  string `json:"text"`
+		Style int64  `json:"style"`
+		Key   string `json:"key"`
+		Url   string `json:"url"`
+	}
+
+	ButtonInteractionTemplateCard {
+		CardType              string              `json:"card_type"`
+		Source                Source              `json:"source"`
+		ActionMenu            ActionMenu          `json:"action_menu"`
+		TaskId                string              `json:"task_id"`
+		MainTitle             MainTitle           `json:"main_title"`
+		QuoteArea             QuoteArea           `json:"quote_area"`
+		SubTitleText          string              `json:"sub_title_text"`
+		HorizontalContentList []HorizontalContent `json:"horizontal_content_list"`
+		CardAction            CardAction          `json:"card_action"`
+		ButtonSelection       ButtonSelection     `json:"button_selection"`
+		ButtonList            []Button            `json:"button_list"`
+	}
+
+	templateCardReqComm {
+		ToUser                 string `json:"touser"`
+		ToParty                string `json:"toparty"`
+		ToTag                  string `json:"totag"`
+		MsgType                string `json:"msgtype"`
+		AgentID                string `json:"agentid"`
+		EnableIDTrans          int    `json:"enable_id_trans"`
+		EnableDuplicateCheck   int    `json:"enable_duplicate_check"`
+		DuplicateCheckInterval int    `json:"duplicate_check_interval"`
+	}
+
+	templateCardRespComm {
+		ErrCode        int64  `json:"errcode"`
+		ErrMsg         string `json:"errmsg"`
+		InvalidUser    string `json:"invaliduser"`    // 不合法的userid，不区分大小写，统一转为小写
+		InvalidParty   string `json:"invalidparty"`   // 不合法的partyid
+		InvalidTag     string `json:"invalidtag"`     // 不合法的标签id
+		UnlicensedUser string `json:"unlicenseduser"` // 没有基础接口许可(包含已过期)的userid
+		MsgID          string `json:"msgid"`          // 消息id
+		ResponseCode   string `json:"response_code"`
+	}
+
+	sendTextNoticeTemplateCardReq {
+		templateCardReqComm
+		TemplateCard TextNoticetemplateCard `json:"template_card"`
+	}
+
+	sendTextNoticeTemplateCardResp {
+		templateCardRespComm
+	}
+
+	sendButtonInteractionTemplateCardReq {
+		templateCardReqComm
+		TemplateCard ButtonInteractionTemplateCard `json:"template_card"`
+	}
+
+	sendButtonInteractionTemplateCardResp {
+		templateCardRespComm
+	}
+)

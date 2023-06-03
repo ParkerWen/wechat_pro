@@ -1,0 +1,16 @@
+version: '3'
+
+services:
+  nginx:
+    image: 'nginx:latest'
+    container_name: nginx-mj
+    user: root
+    environment:
+      - TZ=Asia/Shanghai
+    ports:
+      - '80:80'
+    volumes:
+      - ./docker/nginx/log:/var/log/nginx
+      - ./docker/nginx/conf.d:/etc/nginx/conf.d
+      - .:/www/html
+    

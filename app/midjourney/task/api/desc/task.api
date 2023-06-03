@@ -12,6 +12,7 @@ import (
 )
 
 @server(
+	jwt: Auth
 	prefix: mj/task/v1
 )
 

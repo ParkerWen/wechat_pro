@@ -11,6 +11,7 @@ import (
 	"github.com/ParkerWen/wechat_pro/app/midjourney/task/api/internal/svc"
 	"github.com/ParkerWen/wechat_pro/app/midjourney/task/api/internal/types"
 	"github.com/ParkerWen/wechat_pro/app/midjourney/task/model"
+	"github.com/ParkerWen/wechat_pro/common/ctxdata"
 
 	"github.com/zeromicro/go-zero/core/logx"
 )
@@ -36,6 +37,7 @@ func NewImagineLogic(ctx context.Context, svcCtx *svc.ServiceContext) *ImagineLo
 }
 
 func (l *ImagineLogic) Imagine(req *types.ImagineReq) (*types.ImagineResp, error) {
+	userId := ctxdata.GetUidFromCtx(l.ctx)
 	var action = "IMAGINE"
 	m := map[string]interface{}{
 		"action": action,
@@ -65,6 +67,7 @@ func (l *ImagineLogic) Imagine(req *types.ImagineReq) (*types.ImagineResp, error
 	}
 
 	task := new(model.Task)
+	task.UserId = userId
 	task.Action = action
 	task.Prompt = req.Prompt
 	task.Index = 0
@@ -75,15 +78,22 @@ func (l *ImagineLogic) Imagine(req *types.ImagineReq) (*types.ImagineResp, error
 	task.CreatedAt = time.Now().Unix()
 	task.UpdatedAt = time.Now().Unix()
 
-	_, err = l.svcCtx.TaskModel.InsertByImagine(l.ctx, task)
+	insertResult, err := l.svcCtx.TaskModel.InsertByImagine(l.ctx, task)
 	if err != nil {
 		return &types.ImagineResp{
 			Code: http.StatusBadRequest,
 			Msg:  fmt.Sprintf("Task Database Exception task : %+v , err: %v", task, err),
 		}, nil
 	}
+	data := make(map[string]any)
+	id, err := insertResult.LastInsertId()
+	if err != nil {
+		return nil, err
+	}
+	data["id"] = id
 	return &types.ImagineResp{
 		Code: http.StatusOK,
 		Msg:  "Success",
+		Data: data,
 	}, nil
 }

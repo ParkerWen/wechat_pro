@@ -10,6 +10,7 @@ import (
 	"github.com/ParkerWen/wechat_pro/app/midjourney/task/api/internal/svc"
 	"github.com/ParkerWen/wechat_pro/app/midjourney/task/api/internal/types"
 	"github.com/ParkerWen/wechat_pro/app/midjourney/task/model"
+	"github.com/ParkerWen/wechat_pro/common/ctxdata"
 	"github.com/pkg/errors"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -36,6 +37,7 @@ func NewUpscaleLogic(ctx context.Context, svcCtx *svc.ServiceContext) *UpscaleLo
 }
 
 func (l *UpscaleLogic) Upscale(req *types.UpscaleReq) (*types.UpscaleResp, error) {
+	userId := ctxdata.GetUidFromCtx(l.ctx)
 	var action = "UPSCALE"
 	// 判断 task_id 是否已经执行过 UPSCALE，如果执行过则不再执行 UPSCALE 操作
 	whereBuilder := l.svcCtx.TaskModel.RowBuilder().Where("`index` = ?", req.Index)
@@ -81,6 +83,7 @@ func (l *UpscaleLogic) Upscale(req *types.UpscaleReq) (*types.UpscaleResp, error
 	}
 
 	task := new(model.Task)
+	task.UserId = userId
 	task.Action = action
 	task.Index = req.Index
 	task.Description = res.Description
@@ -91,15 +94,22 @@ func (l *UpscaleLogic) Upscale(req *types.UpscaleReq) (*types.UpscaleResp, error
 	task.CreatedAt = time.Now().Unix()
 	task.UpdatedAt = time.Now().Unix()
 
-	_, err = l.svcCtx.TaskModel.InsertByImagine(l.ctx, task)
+	insertResult, err := l.svcCtx.TaskModel.InsertByImagine(l.ctx, task)
 	if err != nil {
 		return &types.UpscaleResp{
 			Code: http.StatusBadRequest,
 			Msg:  errors.Wrapf(err, "Task Database Exception task : %+v , err: %v", task, err).Error(),
 		}, nil
 	}
+	data := make(map[string]any)
+	id, err := insertResult.LastInsertId()
+	if err != nil {
+		return nil, err
+	}
+	data["id"] = id
 	return &types.UpscaleResp{
 		Code: http.StatusOK,
 		Msg:  "Success",
+		Data: data,
 	}, nil
 }

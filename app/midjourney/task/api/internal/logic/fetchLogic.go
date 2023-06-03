@@ -2,6 +2,7 @@ package logic
 
 import (
 	"context"
+	"net/http"
 	"net/url"
 
 	"github.com/ParkerWen/wechat_pro/app/midjourney/task/api/internal/svc"
@@ -50,6 +51,8 @@ func (l *FetchLogic) Fetch(req *types.FetchReq) (*types.FetchResp, error) {
 	}
 
 	return &types.FetchResp{
-		TaskInfo: tpTask,
+		Code: http.StatusOK,
+		Msg:  "Success",
+		Data: tpTask,
 	}, nil
 }

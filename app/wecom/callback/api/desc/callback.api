@@ -1,0 +1,26 @@
+syntax = "v1"
+
+info(
+	title: "企业微信"
+	desc: "企业微信回调服务"
+	author: "wenshiye"
+	version: "v1"
+)
+
+import (
+	"type/callback.api"
+)
+
+@server(
+	prefix: wecom/v1
+)
+
+service callback {
+	@doc "企业微信触发回调行为 Get请求验证URL有效性"
+	@handler callbackGet
+	get /callback (CallbackReq) returns (CallbackResp)
+	
+	@doc "用户触发回调行为 Post请求接收业务数据"
+	@handler callbackPost
+	post /callback (CallbackReq) returns (CallbackResp)
+}

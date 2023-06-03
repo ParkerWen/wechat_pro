@@ -1,0 +1,22 @@
+syntax = "v1"
+
+info(
+	title: "企业微信"
+	desc: "企业微信回调服务"
+	author: "wenshiye"
+	version: "v1"
+)
+
+type (
+	CallbackReq {
+		MsgSignature string `form:"msg_signature"`
+		TimeStamp    string `form:"timestamp"`
+		Nonce        string `form:"nonce"`
+		EchoStr      string `form:"echostr,optional"`
+	}
+	CallbackResp {
+		ErrCode int    `json:"err_code"`
+		ErrMsg  string `json:"err_msg"`
+		Data    []byte `json:"data"`
+	}
+)

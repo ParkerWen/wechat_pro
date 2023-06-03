@@ -1,0 +1,54 @@
+syntax = "v1"
+
+info(
+	title: "企业微信"
+	desc: "Midjourney"
+	author: "wenshiye"
+	version: "v1"
+)
+
+import (
+	"type/midjourney.api"
+)
+
+@server(
+	prefix: wecom/midjourney/v1
+)
+
+service midjourney {
+	@doc "Midjourney Imagine"
+	@handler imagine
+	post /imagine (imagineReq) returns (imagineResp)
+	
+	@doc "Midjourney Upscale"
+	@handler upscale
+	post /upscale (upscaleReq) returns (upscaleResp)
+	
+	@doc "Midjourney Variation"
+	@handler variation
+	post /variation (variationReq) returns (variationResp)
+	
+	@doc "Midjourney 回调通知"
+	@handler notify
+	post /notify (notifyReq) returns (notifyResp)
+	
+	@doc "企业微信触发回调行为 Get请求验证URL有效性"
+	@handler callbackGet
+	get /callback (callbackReq) returns (callbackResp)
+	
+	@doc "用户触发回调行为 Post请求接收业务数据"
+	@handler callbackPost
+	post /callback (callbackReq) returns (callbackResp)
+	
+	@doc "发送文本通知型模板卡片消息"
+	@handler sendTextNoticeTemplateCard
+	post /sendTextNoticeTemplateCard (sendTextNoticeTemplateCardReq) returns (sendTextNoticeTemplateCardResp)
+	
+	@doc "发送按钮交互型模板卡片消息"
+	@handler sendButtonInteractionTemplateCard
+	post /sendButtonInteractionTemplateCard (sendButtonInteractionTemplateCardReq) returns (sendButtonInteractionTemplateCardResp)
+	
+	@doc "上传临时素材"
+	@handler uploadTempFile
+	post /uploadTempFile (uploadTempFileReq) returns (uploadTempFileResp)
+}

@@ -1,3 +1,21 @@
 goctl api go -api *.api -dir ../  --style=goZero
 
 goctl model mysql datasource -url="root:A6UBxB4igUNxPRfx3CpYutH353VYo8Atpc@tcp(localhost:3306)/midjourney" -table="user"  -dir="." -cache=true --style=goZero
+
+
+####### Docker Compose #######
+version: '3'
+
+services:
+  # nps服务
+  nps:
+    image: 'ffdfgdfg/nps'
+    container_name: nps
+    privileged: true
+    restart: always
+    ports:
+      - 8800:8080
+      - 8024:8024
+      - 8890:8890
+    volumes:
+      - /root/nps/conf:/conf

@@ -42,6 +42,7 @@ type (
 	Task struct {
 		Id           int64  `db:"id"`
 		TaskId       string `db:"task_id"`
+		UserId       int64  `db:"user_id"`
 		ParentTaskId string `db:"parent_task_id"`
 		Action       string `db:"action"`
 		Index        int64  `db:"index"`
@@ -118,8 +119,8 @@ func (m *defaultTaskModel) Insert(ctx context.Context, data *Task) (sql.Result, 
 	midjourneyTaskIdKey := fmt.Sprintf("%s%v", cacheMidjourneyTaskIdPrefix, data.Id)
 	midjourneyTaskTaskIdKey := fmt.Sprintf("%s%v", cacheMidjourneyTaskTaskIdPrefix, data.TaskId)
 	ret, err := m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
-		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, taskRowsExpectAutoSet)
-		return conn.ExecCtx(ctx, query, data.TaskId, data.ParentTaskId, data.Action, data.Index, data.Prompt, data.ImageUrl, data.Description, data.Status, data.State)
+		query := fmt.Sprintf("insert into %s (%s) values (?, ?, ?, ?, ?, ?, ?, ?, ?, ?)", m.table, taskRowsExpectAutoSet)
+		return conn.ExecCtx(ctx, query, data.TaskId, data.UserId, data.ParentTaskId, data.Action, data.Index, data.Prompt, data.ImageUrl, data.Description, data.Status, data.State)
 	}, midjourneyTaskIdKey, midjourneyTaskTaskIdKey)
 	return ret, err
 }
@@ -134,7 +135,7 @@ func (m *defaultTaskModel) Update(ctx context.Context, newData *Task) error {
 	midjourneyTaskTaskIdKey := fmt.Sprintf("%s%v", cacheMidjourneyTaskTaskIdPrefix, data.TaskId)
 	_, err = m.ExecCtx(ctx, func(ctx context.Context, conn sqlx.SqlConn) (result sql.Result, err error) {
 		query := fmt.Sprintf("update %s set %s where `id` = ?", m.table, taskRowsWithPlaceHolder)
-		return conn.ExecCtx(ctx, query, newData.TaskId, newData.ParentTaskId, newData.Action, newData.Index, newData.Prompt, newData.ImageUrl, newData.Description, newData.Status, newData.State, newData.Id)
+		return conn.ExecCtx(ctx, query, newData.TaskId, newData.UserId, newData.ParentTaskId, newData.Action, newData.Index, newData.Prompt, newData.ImageUrl, newData.Description, newData.Status, newData.State, newData.Id)
 	}, midjourneyTaskIdKey, midjourneyTaskTaskIdKey)
 	return err
 }

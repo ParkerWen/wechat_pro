@@ -10,6 +10,7 @@ import (
 	"github.com/ParkerWen/wechat_pro/app/midjourney/task/api/internal/svc"
 	"github.com/ParkerWen/wechat_pro/app/midjourney/task/api/internal/types"
 	"github.com/ParkerWen/wechat_pro/app/midjourney/task/model"
+	"github.com/ParkerWen/wechat_pro/common/ctxdata"
 	"github.com/pkg/errors"
 
 	"github.com/zeromicro/go-zero/core/logx"
@@ -36,6 +37,7 @@ func NewVariationLogic(ctx context.Context, svcCtx *svc.ServiceContext) *Variati
 }
 
 func (l *VariationLogic) Variation(req *types.VariationReq) (*types.VariationResp, error) {
+	userId := ctxdata.GetUidFromCtx(l.ctx)
 	var action = "VARIATION"
 	// 判断 task_id 所属的任务是否 UPSCALE，如果是则拒绝 VARIATION 操作
 	ptask, err := l.svcCtx.TaskModel.FindOneByTaskId(l.ctx, req.TaskId)
@@ -81,6 +83,7 @@ func (l *VariationLogic) Variation(req *types.VariationReq) (*types.VariationRes
 	}
 
 	task := new(model.Task)
+	task.UserId = userId
 	task.Action = action
 	task.Index = req.Index
 	task.Description = res.Description
@@ -91,15 +94,23 @@ func (l *VariationLogic) Variation(req *types.VariationReq) (*types.VariationRes
 	task.CreatedAt = time.Now().Unix()
 	task.UpdatedAt = time.Now().Unix()
 
-	_, err = l.svcCtx.TaskModel.InsertByImagine(l.ctx, task)
+	insertResult, err := l.svcCtx.TaskModel.InsertByImagine(l.ctx, task)
 	if err != nil {
 		return &types.VariationResp{
 			Code: http.StatusBadRequest,
 			Msg:  errors.Wrapf(err, "Task Database Exception task : %+v , err: %v", task, err).Error(),
 		}, nil
 	}
+	data := make(map[string]any)
+	id, err := insertResult.LastInsertId()
+	if err != nil {
+		return nil, err
+	}
+	data["id"] = id
+	data["task_id"] = task.TaskId
 	return &types.VariationResp{
 		Code: http.StatusOK,
 		Msg:  "Success",
+		Data: data,
 	}, nil
 }

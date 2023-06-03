@@ -3,31 +3,35 @@ package types
 
 type Task struct {
 	Id          int64  `json:"id"`
-	TaskId      string `json:"task_id"`
-	Action      string `json:"action"`
-	Index       int64  `json:"index"`
-	Prompt      string `json:"prompt"`
-	Description string `json:"description"`
-	ImageUrl    string `json:"image_url"`
-	Status      string `json:"status"`
-	CreatedAt   int64  `json:"created_at"`
-	UpdatedAt   int64  `json:"updated_at"`
+	TaskId      string `json:"task_id,optional"`
+	Action      string `json:"action,options=[IMAGINE,UPSCALE,VARIATION]"`
+	Index       int64  `json:"index,optional"`
+	Prompt      string `json:"prompt,optional"`
+	Description string `json:"description,optional"`
+	ImageUrl    string `json:"image_url,optional"`
+	Status      string `json:"status,options=[PENDING,SUCCESS]"`
+	CreatedAt   int64  `json:"created_at,optional"`
+	UpdatedAt   int64  `json:"updated_at,optional"`
 }
 
 type FetchReq struct {
-	ID     int64  `form:"id"`
-	TaskId string `form:"task_id"` //任务ID
+	ID     int64  `form:"id,optional"`
+	TaskId string `form:"task_id,optional"` //任务ID
 }
 
 type FetchResp struct {
-	TaskInfo Task `json:"task_info"`
+	Code int64  `json:"code"`
+	Msg  string `json:"msg"`
+	Data Task   `json:"data"`
 }
 
 type ListReq struct {
 }
 
 type ListResp struct {
-	List []Task `json:"list"`
+	Code int64  `json:"code"`
+	Msg  string `json:"msg"`
+	Data []Task `json:"data"`
 }
 
 type ImagineReq struct {
@@ -35,8 +39,9 @@ type ImagineReq struct {
 }
 
 type ImagineResp struct {
-	Code int64  `json:"code"`
-	Msg  string `json:"msg"`
+	Code int64                  `json:"code"`
+	Msg  string                 `json:"msg"`
+	Data map[string]interface{} `json:"data"`
 }
 
 type UpscaleReq struct {
@@ -45,8 +50,9 @@ type UpscaleReq struct {
 }
 
 type UpscaleResp struct {
-	Code int64  `json:"code"`
-	Msg  string `json:"msg"`
+	Code int64                  `json:"code"`
+	Msg  string                 `json:"msg"`
+	Data map[string]interface{} `json:"data"`
 }
 
 type VariationReq struct {
@@ -55,6 +61,7 @@ type VariationReq struct {
 }
 
 type VariationResp struct {
-	Code int64  `json:"code"`
-	Msg  string `json:"msg"`
+	Code int64                  `json:"code"`
+	Msg  string                 `json:"msg"`
+	Data map[string]interface{} `json:"data"`
 }

@@ -1,0 +1,17 @@
+Name: midjourney
+Host: 0.0.0.0
+Port: 8001
+Timeout: 10000
+
+CorpId: ww98fa14c086d5867d
+AppToken: xOTJjMUN1iogeUrC
+EncodingAesKey: aqYVJlCjYkjg7X95IuBnQDX2PlRPGgmYCe9eiST0HWR
+
+Midjourney:
+  CorpId: ww98fa14c086d5867d
+  CorpSecret: aqt08xp3NgdIYCyoUX_YPZ6oxWBZtGAhCD8DPRdE6ro
+  AgentId: "1000003"
+  Cache:
+    Host: localhost:6379
+    Pass: A6UBxB4igUNxPRfx3CpYutH353VYo8Atpc
+  NotifyHook: http://38.95.233.164:8001/wecom/midjourney/v1/notify
