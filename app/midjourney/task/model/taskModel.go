@@ -113,7 +113,7 @@ func (m *defaultTaskModel) FindAll(ctx context.Context, rowBuilder squirrel.Sele
 		rowBuilder = rowBuilder.OrderBy(orderBy)
 	}
 
-	query, values, err := rowBuilder.Where("state = ?", "valid").Where("status = ?", "SUCCESS").Where("user_id = ?", userId).ToSql()
+	query, values, err := rowBuilder.Where("state = ?", "valid").Where("user_id = ?", userId).ToSql()
 	if err != nil {
 		return nil, err
 	}

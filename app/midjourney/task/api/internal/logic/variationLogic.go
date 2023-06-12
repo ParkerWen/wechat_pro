@@ -104,7 +104,10 @@ func (l *VariationLogic) Variation(req *types.VariationReq) (*types.VariationRes
 	data := make(map[string]any)
 	id, err := insertResult.LastInsertId()
 	if err != nil {
-		return nil, err
+		return &types.VariationResp{
+			Code: http.StatusBadRequest,
+			Msg:  err.Error(),
+		}, nil
 	}
 	data["id"] = id
 	data["task_id"] = task.TaskId

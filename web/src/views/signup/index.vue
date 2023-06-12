@@ -69,7 +69,7 @@ export default {
       }
     }
     const validateConfirmPassword = (rule, value, callback) => {
-      if (this.signupForm.password !== this.signupForm.confirmPassword) {
+      if (this.signupForm.password !== this.signupForm.confirm_password) {
         callback(new Error('确认密码与输入的密码不一致'))
       } else {
         callback()

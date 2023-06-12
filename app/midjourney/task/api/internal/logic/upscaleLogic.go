@@ -5,6 +5,7 @@ import (
 	"context"
 	"encoding/json"
 	"net/http"
+	"net/url"
 	"time"
 
 	"github.com/ParkerWen/wechat_pro/app/midjourney/task/api/internal/svc"
@@ -49,9 +50,21 @@ func (l *UpscaleLogic) Upscale(req *types.UpscaleReq) (*types.UpscaleResp, error
 		}, nil
 	}
 	if len(list) > 0 {
+		url, err := url.Parse(list[0].ImageUrl)
+		if err != nil {
+			return nil, err
+		}
+		url.Scheme = "http"
+		url.Host = "img.itcity.cc"
+		data := make(map[string]any)
+		data["id"] = list[0].Id
+		data["task_id"] = list[0].TaskId
+		data["parent_task_id"] = list[0].ParentTaskId
+		data["image_url"] = url.String()
 		return &types.UpscaleResp{
-			Code: http.StatusBadRequest,
-			Msg:  "该任务已经执行过 UPSCALE 操作，不可重复执行",
+			Code: http.StatusOK,
+			Msg:  "Success",
+			Data: data,
 		}, nil
 	}
 	m := map[string]interface{}{
@@ -104,7 +117,10 @@ func (l *UpscaleLogic) Upscale(req *types.UpscaleReq) (*types.UpscaleResp, error
 	data := make(map[string]any)
 	id, err := insertResult.LastInsertId()
 	if err != nil {
-		return nil, err
+		return &types.UpscaleResp{
+			Code: http.StatusBadRequest,
+			Msg:  err.Error(),
+		}, nil
 	}
 	data["id"] = id
 	return &types.UpscaleResp{

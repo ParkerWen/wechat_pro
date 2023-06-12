@@ -53,14 +53,9 @@ export const constantRoutes = [
     path: "/",
     component: Layout,
     redirect: "/jewelry",
-  },
-
-  {
-    path: "/jewelry",
-    component: Layout,
     children: [
       {
-        path: "index",
+        path: "jewelry",
         name: "Jewelry",
         component: () => import("@/views/jewelry/index"),
         meta: { title: "珠宝" },

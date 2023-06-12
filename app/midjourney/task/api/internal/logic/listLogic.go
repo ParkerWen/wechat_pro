@@ -38,13 +38,15 @@ func (l *ListLogic) List(req *types.ListReq) (*types.ListResp, error) {
 	if len(list) > 0 {
 		for _, task := range list {
 			var typeTask types.Task
-			url, err := url.Parse(task.ImageUrl)
-			if err != nil {
-				return nil, err
+			if len(task.ImageUrl) > 0 {
+				url, err := url.Parse(task.ImageUrl)
+				if err != nil {
+					return nil, err
+				}
+				url.Scheme = "http"
+				url.Host = "img.itcity.cc"
+				task.ImageUrl = url.String()
 			}
-			url.Scheme = "http"
-			url.Host = "img.itcity.cc"
-			task.ImageUrl = url.String()
 			_ = copier.Copy(&typeTask, task)
 			resp = append(resp, typeTask)
 		}
