@@ -6,6 +6,7 @@ services:
     image: 'redis:latest'
     restart: always
     user: root
+    privileged: true
     ports:
       - '6379:6379'
     command: redis-server --save 20 1 --loglevel warning --requirepass A6UBxB4igUNxPRfx3CpYutH353VYo8Atpc
@@ -23,6 +24,7 @@ services:
     image: 'mysql:8.0'
     restart: always
     user: root
+    privileged: true
     environment:
       MYSQL_USER: "wechat"
       MYSQL_PASSWORD: "A6UBxB4igUNxPRfx3CpYutH353VYo8Atpc"
