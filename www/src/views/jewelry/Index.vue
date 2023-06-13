@@ -296,7 +296,9 @@ export default {
     },
     getList () {
       list().then(res => {
-        this.data = res.data
+        if (res.data) {
+          this.data = res.data
+        }
         this.loading = false
       }).catch(error => {
         console.log('list fail:', error)
