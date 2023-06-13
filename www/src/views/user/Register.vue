@@ -151,7 +151,7 @@ export default {
     }
   },
   methods: {
-    ...mapActions(['Login', 'Logout']),
+    ...mapActions(['Register']),
     handlePasswordLevel (rule, value, callback) {
       if (!value) {
        return callback()
