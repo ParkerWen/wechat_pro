@@ -228,6 +228,10 @@ export default {
             .finally(() => {
               that.registerBtn = false
           })
+        } else {
+          setTimeout(() => {
+            that.registerBtn = false
+          }, 600)
         }
       })
     },
