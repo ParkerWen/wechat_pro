@@ -1,7 +1,7 @@
 <template>
   <div class="main user-layout-register">
     <h3><span>{{ $t('user.register.register') }}</span></h3>
-    <a-form ref="formRegister" :form="form" id="formRegister">
+    <a-form ref="formRegister" :form="form" id="formRegister" @submit="handleSubmit">
       <a-form-item>
         <a-input
           size="large"
@@ -85,7 +85,6 @@
           htmlType="submit"
           class="register-button"
           :loading="registerBtn"
-          @click.stop.prevent="handleSubmit"
           :disabled="registerBtn">{{ $t('user.register.register') }}
         </a-button>
         <router-link class="login" :to="{ name: 'login' }">{{ $t('user.register.sign-in') }}</router-link>
@@ -209,7 +208,8 @@ export default {
     handleSubmit (e) {
       e.preventDefault()
       const { form: { validateFields }, state, $router, Register } = this
-      state.registerBtn = true
+      const that = this
+      this.registerBtn = true
       validateFields({ force: true }, (err, values) => {
         if (!err) {
           const formParams = { ...values }
@@ -222,11 +222,11 @@ export default {
             .then((res) => {
               $router.push({ path: '/' })
               state.passwordLevelChecked = false
-              state.registerBtn = false
+              that.registerBtn = false
             })
             .catch(err => this.requestFailed(err))
             .finally(() => {
-              state.registerBtn = false
+              that.registerBtn = false
           })
         }
       })
