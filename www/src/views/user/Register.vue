@@ -96,6 +96,7 @@
 </template>
 
 <script>
+import { mapActions } from 'vuex'
 import { getSmsCaptcha } from '@/api/login'
 import { deviceMixin } from '@/store/device-mixin'
 import { scorePassword } from '@/utils/util'
@@ -151,6 +152,7 @@ export default {
     }
   },
   methods: {
+    ...mapActions(['Login', 'Logout']),
     handlePasswordLevel (rule, value, callback) {
       if (!value) {
        return callback()
@@ -204,12 +206,28 @@ export default {
       this.state.passwordLevelChecked = false
     },
 
-    handleSubmit () {
-      const { form: { validateFields }, state, $router } = this
+    handleSubmit (e) {
+      e.preventDefault()
+      const { form: { validateFields }, state, $router, Register } = this
+      state.registerBtn = true
       validateFields({ force: true }, (err, values) => {
         if (!err) {
-          state.passwordLevelChecked = false
-          $router.push({ name: 'registerResult', params: { ...values } })
+          const formParams = { ...values }
+          const registerParams = {
+            'email': formParams.email,
+            'password': formParams.password,
+            'confirm_password': formParams.password2
+          }
+          Register(registerParams)
+            .then((res) => {
+              $router.push({ path: '/' })
+              state.passwordLevelChecked = false
+              state.registerBtn = false
+            })
+            .catch(err => this.requestFailed(err))
+            .finally(() => {
+              state.registerBtn = false
+          })
         }
       })
     },

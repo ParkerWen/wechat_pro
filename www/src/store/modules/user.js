@@ -1,6 +1,7 @@
 import storage from 'store'
 import expirePlugin from 'store/plugins/expire'
 import { login, getInfo } from '@/api/login'
+import { register } from '@/api/register'
 import { ACCESS_TOKEN } from '@/store/mutation-types'
 import { welcome } from '@/utils/util'
 
@@ -35,6 +36,16 @@ const user = {
   },
 
   actions: {
+    // 注册
+    Register ({ commit }, userInfo) {
+      return new Promise((resolve, reject) => {
+        register(userInfo).then(response => {
+          resolve()
+        }).catch(error => {
+          reject(error)
+        })
+      })
+    },
     // 登录
     Login ({ commit }, userInfo) {
       return new Promise((resolve, reject) => {
