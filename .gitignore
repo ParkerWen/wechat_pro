@@ -1,0 +1,12 @@
+#deploy data
+data/*
+!data/.gitkeep
+
+#vscode
+.vscode
+.vscode/
+
+#docker
+docker/mysql/*
+docker/redis/*
+docker/nginx/log/*
