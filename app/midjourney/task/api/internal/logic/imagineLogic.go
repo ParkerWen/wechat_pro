@@ -40,12 +40,11 @@ func (l *ImagineLogic) Imagine(req *types.ImagineReq) (*types.ImagineResp, error
 	userId := ctxdata.GetUidFromCtx(l.ctx)
 	var action = "IMAGINE"
 	m := map[string]interface{}{
-		"action": action,
 		"prompt": req.Prompt,
 	}
 	mJson, _ := json.Marshal(m)
 	contentReader := bytes.NewReader(mJson)
-	r, _ := http.NewRequest("POST", "http://38.95.233.164:8088/mj/trigger/submit", contentReader)
+	r, _ := http.NewRequest("POST", "http://38.95.233.164:8088/mj/submit/imagine", contentReader)
 	r.Header.Set("Content-Type", "application/json")
 	client := &http.Client{}
 	resp, _ := client.Do(r)
