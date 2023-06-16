@@ -21,4 +21,14 @@ services:
       - /root/nps/conf:/conf
 
 
-docker run  -p 8088:8080  -e mj.discord.guild-id="1109061645055053915"  -e mj.discord.channel-id="1109061645055053918"  -e mj.discord.user-token="MTA5ODIyNDA3NTc5ODc2MTU4Mw.GuMSna.8Pxv16rbaePfK_VnJuVdTybyZgc5WEC5fWKwsA"  -e mj.discord.bot-token="MTEwOTA2MDM3OTg3Njc5NDQ3OQ.Gh5Xj6.3r1VQux6FeM55sZr3HW187nvppMKhZ412dMrro" -e mj.discord.user-wss=false  --restart=always  chazzcheung/midjourney-proxy:latest
+docker run  -p 8088:8080 -d  -e mj.discord.guild-id="1109061645055053915"  -e mj.discord.channel-id="1109061645055053918"  -e mj.discord.user-token="MTA5ODIyNDA3NTc5ODc2MTU4Mw.GFeAjU.7tz4gEUzDJ0jXB9raHxPN6fJQBFFfDNtl_uC0g"  -e mj.discord.bot-token="MTExOTIxNDgwMzE2OTMyNTA3OQ.GZIxCe.txDCZQDxSd3d3WAamPyC13KNFQPqp3GHwLkgMU" -e mj.discord.user-wss=false  --restart=always  chazzcheung/midjourney-proxy:latest
+
+
+docker run -d --name midjourney-proxy-w \
+ -p 8080:8080 \
+ -e mj.discord.guild-id="1109090102908555286" \
+ -e mj.discord.channel-id="1109090103432855724" \
+ -e mj.discord.user-token="MTA5ODIyNDA3NTc5ODc2MTU4Mw.GFeAjU.7tz4gEUzDJ0jXB9raHxPN6fJQBFFfDNtl_uC0g" \
+ -e mj.discord.user-agent="Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/114.0.0.0 Safari/537.36" \
+ --restart=always \
+ chazzcheung/midjourney-proxy:latest

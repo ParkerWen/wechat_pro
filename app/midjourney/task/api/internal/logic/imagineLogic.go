@@ -44,7 +44,7 @@ func (l *ImagineLogic) Imagine(req *types.ImagineReq) (*types.ImagineResp, error
 	}
 	mJson, _ := json.Marshal(m)
 	contentReader := bytes.NewReader(mJson)
-	r, _ := http.NewRequest("POST", "http://38.95.233.164:8088/mj/submit/imagine", contentReader)
+	r, _ := http.NewRequest("POST", "http://38.95.233.164:8080/mj/submit/imagine", contentReader)
 	r.Header.Set("Content-Type", "application/json")
 	client := &http.Client{}
 	resp, _ := client.Do(r)

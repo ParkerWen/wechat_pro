@@ -74,7 +74,7 @@ func (l *UpscaleLogic) Upscale(req *types.UpscaleReq) (*types.UpscaleResp, error
 	}
 	mJson, _ := json.Marshal(m)
 	contentReader := bytes.NewReader(mJson)
-	r, _ := http.NewRequest("POST", "http://38.95.233.164:8088/mj/submit/change", contentReader)
+	r, _ := http.NewRequest("POST", "http://38.95.233.164:8080/mj/submit/change", contentReader)
 	r.Header.Set("Content-Type", "application/json")
 	client := &http.Client{}
 	resp, _ := client.Do(r)
