@@ -48,7 +48,7 @@ func (h *UpdateMJRecordHandler) ProcessTask(ctx context.Context, _ *asynq.Task) 
 	if len(list) > 0 {
 		for _, taskInfo := range list {
 			request := gorequest.New()
-			resp, body, _ := request.Get(fmt.Sprintf("http://38.95.233.164:8088/mj/task/%s/fetch", taskInfo.TaskId)).End()
+			resp, body, _ := request.Get(fmt.Sprintf("http://38.95.233.164:8080/mj/task/%s/fetch", taskInfo.TaskId)).End()
 			defer resp.Body.Close()
 			if len(body) <= 0 {
 				continue
