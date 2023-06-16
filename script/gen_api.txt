@@ -19,3 +19,6 @@ services:
       - 8890:8890
     volumes:
       - /root/nps/conf:/conf
+
+
+docker run  -p 8088:8080  -e mj.discord.guild-id="1109061645055053915"  -e mj.discord.channel-id="1109061645055053918"  -e mj.discord.user-token="MTA5ODIyNDA3NTc5ODc2MTU4Mw.GuMSna.8Pxv16rbaePfK_VnJuVdTybyZgc5WEC5fWKwsA"  -e mj.discord.bot-token="MTEwOTA2MDM3OTg3Njc5NDQ3OQ.Gh5Xj6.3r1VQux6FeM55sZr3HW187nvppMKhZ412dMrro" -e mj.discord.user-wss=false  --restart=always  chazzcheung/midjourney-proxy:latest
